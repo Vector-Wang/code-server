@@ -1,7 +1,7 @@
 FROM codercom/code-server:v2
 
 # We deploy with ubuntu so that devs have a familiar environment.
-FROM nvidia/cuda:9.0-cudnn7-devel-ubuntu18.04
+FROM nvidia/cuda:9.0-cudnn7-devel-ubuntu16.04
 
 LABEL maintainer.name="xczh" \
       maintainer.email="xczh.me@foxmail.com" \
