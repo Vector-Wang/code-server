@@ -1,0 +1,63 @@
+FROM codercom/code-server:v2
+
+# We deploy with ubuntu so that devs have a familiar environment.
+FROM nvidia/cuda:9.0-cudnn7-devel-ubuntu18.04
+
+LABEL maintainer.name="xczh" \
+      maintainer.email="xczh.me@foxmail.com" \
+      description="code-server WebIDE"
+
+COPY --from=0 /usr/local/bin/code-server /usr/bin/code-server
+
+RUN rm -rf /var/lib/apt/lists/* && \
+    apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+        apt-transport-https \
+        apt-utils \
+        ca-certificates \
+        curl \
+        file \
+        git \
+        gnupg \
+        htop \
+        inetutils-ping \
+        libcap2-bin \
+        locales \
+        nano \
+        net-tools \
+        openssl \
+        sudo \
+        tzdata \
+        unzip \
+        vim \
+        wget \
+        xauth \
+        zip \
+        && \
+    echo "Asia/Shanghai" > /etc/timezone && \
+    cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
+    locale-gen en_US.UTF-8 && \
+    sed -i 's/http:\/\/archive.ubuntu.com/https:\/\/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list && \
+    sed -i 's/http:\/\/security.ubuntu.com/https:\/\/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list && \
+    DEBIAN_FRONTEND=noninteractive apt-get remove --purge -y tzdata && \
+    apt-get clean -y && \
+    apt-get autoremove -y && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /root/.cache
+
+ENV LC_ALL=en_US.UTF-8
+
+RUN adduser --gecos '' --disabled-password coder && \
+    echo "coder ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/nopasswd && \
+    mkdir -p /home/coder/project && \
+    chown -R coder.coder /home/coder/project && \
+    setcap cap_net_bind_service+eip /usr/bin/code-server
+
+USER coder
+
+WORKDIR /home/coder/project
+
+VOLUME ["/home/coder/project"]
+
+EXPOSE 80
+
+CMD ["code-server", "--host", "0.0.0.0", "--port", "80", "--auth", "password", "--user-data-dir", "/home/coder/project/.code-user-data", "--disable-telemetry"]
