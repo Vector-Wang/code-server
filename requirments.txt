@@ -3,7 +3,6 @@ jupyter
 numpy
 scipy
 matplotlib
-torchvision
 scikit-learn
 scikit-image
 requests
@@ -13,7 +12,6 @@ six
 xlrd
 pandas
 pillow
-openyxl
 flask
 cffi
 SimpleITK
