@@ -1,7 +1,9 @@
 FROM vectorwang/code-server:latest
 LABEL maintainer "Vector Wang"
 
-RUN apt-get update && \
+RUN sed -i 's/https:\/\/mirrors.tuna.tsinghua.edu.cn/http:\/\/archive.ubuntu.com/g' /etc/apt/sources.list && \
+    sed -i 's/https:\/\/mirrors.tuna.tsinghua.edu.cn/http:\/\/security.ubuntu.com/g' /etc/apt/sources.list && \
+    apt-get update && \
     apt-get install -y --no-install-recommends \
         openssh-server \
         software-properties-common \
