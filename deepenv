@@ -1,8 +1,8 @@
 FROM vectorwang/code-server:latest
 LABEL maintainer "Vector Wang"
 
-RUN sed -i 's/https:\/\/mirrors.tuna.tsinghua.edu.cn/http:\/\/archive.ubuntu.com/g' /etc/apt/sources.list && \
-    sed -i 's/https:\/\/mirrors.tuna.tsinghua.edu.cn/http:\/\/security.ubuntu.com/g' /etc/apt/sources.list && \
+RUN mv /etc/apt/sources.list /etc/apt/sources.list.tuna && \
+    wget -O /etc/apt/sources.list https://gist.githubusercontent.com/rohitrawat/60a04e6ebe4a9ec1203eac3a11d4afc1/raw/fcdfde2ab57e455ba9b37077abf85a81c504a4a9/sources.list && \
     apt-get update && \
     apt-get install -y --no-install-recommends \
         openssh-server \
@@ -31,3 +31,5 @@ RUN apt-get update && \
     pip3.6 install -r requirments.txt && \
     pip3.6 config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
 
+RUN mv /etc/apt/sources.list /etc/apt/sources.list.raw && \
+    mv /etc/apt/sources.list.tuna /etc/apt/sources.list
