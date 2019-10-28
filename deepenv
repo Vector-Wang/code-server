@@ -28,6 +28,7 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends libopencv-dev python-opencv && \
     wget -O torch-1.1.0-cp36-cp36m-linux_x86_64.whl https://download.pytorch.org/whl/cu90/torch-1.1.0-cp36-cp36m-linux_x86_64.whl && \
     pip3.6 install torch-1.1.0-cp36-cp36m-linux_x86_64.whl && \
+    wget -O requirments.txt https://raw.githubusercontent.com/Vector-Wang/code-server/master/requirments.txt && \
     pip3.6 install -r requirments.txt && \
     pip3.6 config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
 
