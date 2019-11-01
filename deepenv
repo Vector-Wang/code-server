@@ -20,7 +20,7 @@ RUN mv /etc/apt/sources.list /etc/apt/sources.list.tuna && \
         python3-dev && \
     add-apt-repository -y ppa:jonathonf/python-3.6 && \
     apt-get update && \
-    apt-get install -y --no-install-recommends python3.6 && \
+    apt-get install -y --no-install-recommends python3.6 python3.6-dev && \
     curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && \
     python3.6 get-pip.py
 

@@ -17,3 +17,4 @@ cffi
 SimpleITK
 pydicom
 visdom
+opencv-python
