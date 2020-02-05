@@ -1,0 +1,36 @@
+FROM vectorwang/code-server:10.1-cudnn7-devel-ubuntu18.04
+LABEL maintainer "Vector Wang"
+
+RUN mv /etc/apt/sources.list /etc/apt/sources.list.tuna && \
+    wget -O /etc/apt/sources.list https://gist.githubusercontent.com/rohitrawat/60a04e6ebe4a9ec1203eac3a11d4afc1/raw/fcdfde2ab57e455ba9b37077abf85a81c504a4a9/sources.list && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \
+        openssh-server \
+        software-properties-common \
+        python-software-properties \
+        lrzsz \
+        build-essential \
+        cmake \
+        g++ \
+        gcc \
+        gdb \
+        make && \
+    apt-get install -y --no-install-recommends \
+        python3 \
+        python3-dev && \
+    add-apt-repository -y ppa:jonathonf/python-3.6 && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends python3.6 python3.6-dev && \
+    curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && \
+    python3.6 get-pip.py
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends libopencv-dev python-opencv && \
+    wget -O torch-1.1.0-cp36-cp36m-linux_x86_64.whl https://download.pytorch.org/whl/cu90/torch-1.1.0-cp36-cp36m-linux_x86_64.whl && \
+    pip3.6 install torch-1.1.0-cp36-cp36m-linux_x86_64.whl && \
+    wget -O requirments.txt https://raw.githubusercontent.com/Vector-Wang/code-server/master/requirments.txt && \
+    pip3.6 install -r requirments.txt && \
+    pip3.6 config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+
+RUN mv /etc/apt/sources.list /etc/apt/sources.list.raw && \
+    mv /etc/apt/sources.list.tuna /etc/apt/sources.list
