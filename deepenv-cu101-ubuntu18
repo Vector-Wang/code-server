@@ -1,6 +1,8 @@
 FROM vectorwang/code-server:ubuntu18-cu101-cudnn7
 LABEL maintainer "Vector Wang"
 
+ARG DEBIAN_FRONTEND=noninteractive
+
 RUN mv /etc/apt/sources.list /etc/apt/sources.list.tuna && \
     wget -O /etc/apt/sources.list https://gist.githubusercontent.com/h0bbel/4b28ede18d65c3527b11b12fa36aa8d1/raw/314419c944ce401039c7def964a3e06324db1128/sources.list && \
     apt-get update && \
