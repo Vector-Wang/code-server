@@ -22,12 +22,12 @@ RUN mv /etc/apt/sources.list /etc/apt/sources.list.tuna && \
     curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && \
     python3.6 get-pip.py
 
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends libopencv-dev python-opencv && \
-    pip3.6 install pip install torch torchvision && \
-    wget -O requirments.txt https://raw.githubusercontent.com/Vector-Wang/code-server/master/requirments.txt && \
-    pip3.6 install -r requirments.txt && \
-    pip3.6 config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+# RUN apt-get update && \
+#     apt-get install -y --no-install-recommends libopencv-dev && \
+#     pip3.6 install pip install torch torchvision && \
+#     wget -O requirments.txt https://raw.githubusercontent.com/Vector-Wang/code-server/master/requirments.txt && \
+#     pip3.6 install -r requirments.txt && \
+#     pip3.6 config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
 
 RUN mv /etc/apt/sources.list /etc/apt/sources.list.raw && \
     mv /etc/apt/sources.list.tuna /etc/apt/sources.list
