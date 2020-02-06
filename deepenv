@@ -2,7 +2,6 @@ FROM vectorwang/code-server:latest
 LABEL maintainer "Vector Wang"
 
 RUN mv /etc/apt/sources.list /etc/apt/sources.list.tuna && \
-    mv /etc/apt/sources.list.raw /etc/apt/sources.list.raw && \
     wget -O /etc/apt/sources.list https://gist.githubusercontent.com/rohitrawat/60a04e6ebe4a9ec1203eac3a11d4afc1/raw/fcdfde2ab57e455ba9b37077abf85a81c504a4a9/sources.list && \
     apt-get update && \
     apt-get install -y --no-install-recommends \
