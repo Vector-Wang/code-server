@@ -7,7 +7,6 @@ RUN mv /etc/apt/sources.list /etc/apt/sources.list.tuna && \
     apt-get install -y --no-install-recommends \
         openssh-server \
         software-properties-common \
-        python-software-properties \
         lrzsz \
         build-essential \
         cmake \
