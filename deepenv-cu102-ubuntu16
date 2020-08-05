@@ -1,0 +1,40 @@
+FROM vectorwang/code-server:ubuntu18-cu101-cudnn7
+
+LABEL maintainer.name="vectorwang" \
+      maintainer.email="wjx0709@outlook.com" \
+      description="deep learning environment with pytorch"
+
+ARG DEBIAN_FRONTEND=noninteractive
+
+RUN mv /etc/apt/sources.list /etc/apt/sources.list.tuna && \
+    wget -O /etc/apt/sources.list https://gist.githubusercontent.com/h0bbel/4b28ede18d65c3527b11b12fa36aa8d1/raw/314419c944ce401039c7def964a3e06324db1128/sources.list && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \
+        openssh-server \
+        software-properties-common \
+        lrzsz \
+        build-essential \
+        cmake \
+        g++ \
+        gcc \
+        gdb \
+        make && \
+    apt-get install -y --no-install-recommends \
+        python3 \
+        python3-dev && \
+    curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && \
+    python3.6 get-pip.py
+
+COPY requirments.txt /root/
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends libopencv-dev && \
+    pip3.6 install pip install torch torchvision && \
+    # wget -O requirments.txt https://raw.githubusercontent.com/Vector-Wang/code-server/master/requirments.txt && \
+    pip3.6 install -r /root/requirments.txt && \
+    pip3.6 config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+
+RUN mv /etc/apt/sources.list /etc/apt/sources.list.raw && \
+    mv /etc/apt/sources.list.tuna /etc/apt/sources.list
+
+CMD ['entrypoint.sh']
