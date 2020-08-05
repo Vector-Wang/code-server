@@ -1,4 +1,4 @@
-FROM vectorwang/code-server:ubuntu18-cu101-cudnn7
+FROM vectorwang/code-server:ubuntu16-cu102-cudnn7
 
 LABEL maintainer.name="vectorwang" \
       maintainer.email="wjx0709@outlook.com" \
@@ -25,7 +25,8 @@ RUN mv /etc/apt/sources.list /etc/apt/sources.list.tuna && \
     curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && \
     python3.6 get-pip.py
 
-COPY requirments.txt /root/
+COPY requirments.txt /root/requirments.txt
+COPY entrypoint.sh /entrypoint.sh
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends libopencv-dev && \
@@ -37,4 +38,4 @@ RUN apt-get update && \
 RUN mv /etc/apt/sources.list /etc/apt/sources.list.raw && \
     mv /etc/apt/sources.list.tuna /etc/apt/sources.list
 
-CMD ['entrypoint.sh']
+CMD ['/bin/bash', '/entrypoint.sh']
