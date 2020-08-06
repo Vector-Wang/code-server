@@ -60,4 +60,4 @@ VOLUME ["/home/coder/project"]
 
 EXPOSE 80
 
-CMD ["dumb-init" "fixuid" "-q" "/usr/bin/code-server" "--bind-addr" "0.0.0.0:80" "."]
+CMD ["code-server", "--host", "0.0.0.0", "--port", "80", "--auth", "password", "--user-data-dir", "/home/coder/project/.code-user-data", "--disable-telemetry"]
