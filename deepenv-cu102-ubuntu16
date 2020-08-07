@@ -33,7 +33,8 @@ RUN apt-get update && \
     pip3 install pip install torch torchvision && \
     # wget -O requirments.txt https://raw.githubusercontent.com/Vector-Wang/code-server/master/requirments.txt && \
     pip3 install -r /root/requirments.txt && \
-    pip3 config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+    pip3 config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple && \
+    mkdir /var/run/sshd
 
 RUN mv /etc/apt/sources.list /etc/apt/sources.list.raw && \
     mv /etc/apt/sources.list.tuna /etc/apt/sources.list
