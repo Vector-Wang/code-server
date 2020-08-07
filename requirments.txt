@@ -39,7 +39,6 @@ nbformat
 networkx
 notebook
 numpy
-opencv
 pandas
 pandocfilters
 parso
