@@ -38,4 +38,4 @@ RUN apt-get update && \
 RUN mv /etc/apt/sources.list /etc/apt/sources.list.raw && \
     mv /etc/apt/sources.list.tuna /etc/apt/sources.list
 
-CMD ['/bin/bash', '/entrypoint.sh']
+CMD ["/bin/bash", "/entrypoint.sh"]

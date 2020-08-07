@@ -13,7 +13,6 @@ COPY --from=cdr /usr/lib/code-server/ /usr/lib/code-server
 RUN rm -rf /var/lib/apt/lists/* && \
     apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-        dumb-init \
         man \
         procps \
         ssh \
