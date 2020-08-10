@@ -7,7 +7,7 @@ LABEL maintainer.name="vectorwang" \
 
 ARG DEBIAN_FRONTEND=noninteractive
 
-COPY --from=ub /etp/apt/sources.list /etc/apt/sources.list.raw
+COPY --from=ub /etc/apt/sources.list /etc/apt/sources.list.raw
 
 RUN mv /etc/apt/sources.list /etc/apt/sources.list.tuna && \
     cp /etc/apt/sources.list.raw /etc/apt/sources.list && \
