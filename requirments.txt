@@ -75,10 +75,6 @@ tqdm
 traitlets
 urllib3
 visdom
-wcwidt
-webencodings
 websocket-client
 Werkzeug
-widgetsnbextension
 xlrd
-zipp
