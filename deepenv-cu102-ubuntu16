@@ -1,4 +1,4 @@
-FROM libary/ubuntu:16.04 AS ub
+FROM library/ubuntu:16.04 AS ub
 FROM vectorwang/code-server:ubuntu16-cu102-cudnn7
 
 LABEL maintainer.name="vectorwang" \
