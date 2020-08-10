@@ -1,3 +1,4 @@
+FROM libary/ubuntu:16.04 AS ub
 FROM vectorwang/code-server:ubuntu16-cu102-cudnn7
 
 LABEL maintainer.name="vectorwang" \
@@ -6,9 +7,12 @@ LABEL maintainer.name="vectorwang" \
 
 ARG DEBIAN_FRONTEND=noninteractive
 
-RUN cp /etc/apt/sources.list /etc/apt/sources.list.tuna && \
-    sed -i 's/http:\/\/mirrors.tuna.tsinghua.edu.cn/https:\/\/archive.ubuntu.com/g' /etc/apt/sources.list && \
-    sed -i 's/http:\/\/mirrors.tuna.tsinghua.edu.cn/https:\/\/security.ubuntu.com/g' /etc/apt/sources.list && \
+COPY --from=ub /etp/apt/sources.list /etc/apt/sources.list.raw
+
+RUN mv /etc/apt/sources.list /etc/apt/sources.list.tuna && \
+    cp /etc/apt/sources.list.raw /etc/apt/sources.list
+    # sed -i 's/https:\/\/mirrors.tuna.tsinghua.edu.cn/http:\/\/archive.ubuntu.com/g' /etc/apt/sources.list && \
+    # sed -i 's/https:\/\/mirrors.tuna.tsinghua.edu.cn/http:\/\/security.ubuntu.com/g' /etc/apt/sources.list && \
     # wget -O /etc/apt/sources.list https://gist.githubusercontent.com/h0bbel/4b28ede18d65c3527b11b12fa36aa8d1/raw/314419c944ce401039c7def964a3e06324db1128/sources.list && \
     apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -20,25 +24,31 @@ RUN cp /etc/apt/sources.list /etc/apt/sources.list.tuna && \
         g++ \
         gcc \
         gdb \
+        zsh \
         make && \
+    # install python3.5
     apt-get install -y --no-install-recommends \
         python3 \
         python3-dev && \
+    # install sci-cal python3.6
+    add-apt-repository -y ppa:deadsnakes/ppa && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends python3.6 python3.6-dev && \
     curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && \
-    python3 get-pip.py
+    python3.6 get-pip.py
 
 COPY requirments.txt /root/requirments.txt
 COPY entrypoint.sh /entrypoint.sh
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends libopencv-dev && \
-    pip3 install torch torchvision && \
+    pip3.6 install torch torchvision && \
     # wget -O requirments.txt https://raw.githubusercontent.com/Vector-Wang/code-server/master/requirments.txt && \
-    pip3 install -r /root/requirments.txt && \
-    pip3 config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple && \
+    pip3.6 install -r /root/requirments.txt && \
+    pip3.6 config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple && \
     mkdir /var/run/sshd
 
 RUN mv /etc/apt/sources.list /etc/apt/sources.list.raw && \
-    mv /etc/apt/sources.list.tuna /etc/apt/sources.list
+    cp /etc/apt/sources.list.tuna /etc/apt/sources.list
 
 CMD ["/bin/bash", "/entrypoint.sh"]
