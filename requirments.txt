@@ -16,7 +16,7 @@ graphviz
 idna
 imageio
 importlib-metadata
-ipython==7.9.0
+ipython
 itsdangerous
 jedi
 Jinja2
@@ -30,6 +30,7 @@ jupyter-console
 jupyter-core
 kiwisolver
 lxml
+opencv-python
 MarkupSafe
 matplotlib
 mistune
