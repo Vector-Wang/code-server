@@ -93,9 +93,9 @@ COPY entrypoint.sh /entrypoint.sh
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends libopencv-dev && \
-    pip3.6 install torch torchvision && \
     # wget -O requirments.txt https://raw.githubusercontent.com/Vector-Wang/code-server/master/requirments.txt && \
     pip3.6 install -r /root/requirments.txt && \
+    pip3.6 install torch==1.8.1+cu111 torchvision==0.9.1+cu111 torchaudio==0.8.1 -f https://download.pytorch.org/whl/torch_stable.html &&\
     pip3.6 config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple && \
     mkdir /var/run/sshd
 
