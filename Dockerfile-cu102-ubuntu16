@@ -1,11 +1,13 @@
 FROM codercom/code-server:latest AS cdr
 
-# We deploy with ubuntu so that devs have a familiar environment.
-FROM nvidia/cuda:10.2-cudnn7-devel-ubuntu16.04
+FROM library/ubuntu:16.04 AS ub
 
-LABEL maintainer.name="xczh" \
-      maintainer.email="xczh.me@foxmail.com" \
-      description="code-server WebIDE"
+# We deploy with ubuntu so that devs have a familiar environment.
+FROM nvidia/cuda:10.2-cudnn8-devel-ubuntu16.04
+
+LABEL maintainer.name="vectorwang" \
+      maintainer.email="wjx0709@outlook.com" \
+      description="deep learning environment"
 
 COPY --from=cdr /usr/bin/code-server /usr/bin/code-server
 COPY --from=cdr /usr/lib/code-server/ /usr/lib/code-server
@@ -56,13 +58,61 @@ RUN adduser --gecos '' --disabled-password coder && \
     chown -R coder.coder /home/coder/project && \
     setcap cap_net_bind_service+eip /usr/lib/code-server/code-server
 
-# USER coder
+ARG DEBIAN_FRONTEND=noninteractive
 
+COPY --from=ub /etc/apt/sources.list /etc/apt/sources.list.raw
+
+RUN mv /etc/apt/sources.list /etc/apt/sources.list.tuna && \
+    cp /etc/apt/sources.list.raw /etc/apt/sources.list && \
+    # wget -O /etc/apt/sources.list https://gist.githubusercontent.com/h0bbel/4b28ede18d65c3527b11b12fa36aa8d1/raw/314419c944ce401039c7def964a3e06324db1128/sources.list && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \
+        openssh-server \
+        software-properties-common \
+        lrzsz \
+        build-essential \
+        cmake \
+        g++ \
+        gcc \
+        gdb \
+        zsh \
+        make && \
+    # install python3.7
+    apt-get install -y --no-install-recommends \
+        python3 \
+        python3-dev && \
+    # install sci-cal python3.6
+    add-apt-repository -y ppa:deadsnakes/ppa && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends python3.6 python3.6-dev && \
+    curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && \
+    python3.6 get-pip.py
+
+COPY requirments.txt /root/requirments.txt
+COPY entrypoint.sh /entrypoint.sh
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends libopencv-dev && \
+    # wget -O requirments.txt https://raw.githubusercontent.com/Vector-Wang/code-server/master/requirments.txt && \
+    pip3.6 install -r /root/requirments.txt && \
+    # pip3.6 install torch==1.8.1+cu111 torchvision==0.9.1+cu111 torchaudio==0.8.1 -f https://download.pytorch.org/whl/torch_stable.html && \
+    pip3.6 config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple && \
+    mkdir /var/run/sshd
+
+RUN mv /etc/apt/sources.list /etc/apt/sources.list.raw && \
+    cp /etc/apt/sources.list.tuna /etc/apt/sources.list
+
+# USER coder
 WORKDIR /home/coder/project
 
 VOLUME ["/home/coder/project"]
 
 EXPOSE 80
 
+CMD ["/bin/bash", "/entrypoint.sh"]
+
+
+
+
 # CMD ["code-server", "--host", "0.0.0.0", "--port", "8080", "--auth", "password", "--user-data-dir", "/home/coder/project/.code-user-data", "--disable-telemetry"]
-CMD ["/usr/bin/code-server", "--host", "0.0.0.0", "--port 80", "--user-data-dir", "/home/coder/project/.code-user-data", "--auth", "password", "--disable-telemetry"]
+# CMD ["/usr/bin/code-server", "--host", "0.0.0.0", "--port 80", "--user-data-dir", "/home/coder/project/.code-user-data", "--auth", "password", "--disable-telemetry"]
